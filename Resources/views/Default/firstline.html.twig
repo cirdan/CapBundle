@@ -1,0 +1,35 @@
+{% if  (is_granted('IS_AUTHENTICATED_FULLY')==false) and not (runner.hasData is defined) %}
+<div class="well span3">
+  <h1>Bienvenue</h1>
+  <p>Ce site vous offre un moyen simple de réaliser le suivi de vos sorties.</p>
+</div>
+<div class="well span3">
+  <h2>Commencez !</h2>
+  <p>Notez votre pemière sortie :</p>
+  <p><a class="btn btn-primary btn-large" href="{{ path('sortie_new') }}"><i class="icon-plus icon-white"></i> {{'runs.create.new'|trans}}</a></p>
+</div>
+<div class="well span3">
+  <h2>Totaux</h2>
+  <p>Les pavés ci dessous vos présentent les totaux pour tous les utilisateurs.<br />
+    Dès que vous aurez <a href="{{ path('sortie_new') }}">saisi une sortie</a>, vous pourrez visualiser vos propres données.</p>
+</div>
+<div class="well span3">
+  <h2>Confidentialité</h2>
+  <p>Par défaut, le service est anonyme : vous pouvez l'utiliser sans créer de compte : il vous faut juste noter quelque part (par exemple dans vos favoris) l'adresse personnalisée qui vous est présentée sur toutes les pages après avoir saisi une première sortie.</p>
+</div>
+{% else %}
+<div class="well span3">
+  <h2>Soyez geek. Courez.</h2>
+  <p><a class="btn btn-primary btn-large" href="{{ path('sortie_new') }}"><i class="icon-plus icon-white"></i> {{'runs.create.new'|trans}}</a></p>
+</div>
+{% if lastRun %}
+<div class="span3 well" id="lastRun">
+  {% include 'SFCapBundle:Sortie:sortieResume.html.twig' with {'lastRun': lastRun} %}
+</div>
+{% endif %}
+<div class="well span3">
+  <h2>Totaux</h2>
+  Consultez les km parcourus par tous les utilisateurs
+  <p><button class="btn" id="loadCollectiveData">Voir les totaux</button></p>
+</div>
+{% endif %}

@@ -1,0 +1,21 @@
+{% extends 'SFCapBundle::cap.html.twig' %}
+{% block body %}
+{% if error %}
+    <div>{{ error.message }}</div>
+{% endif %}
+<form action="{{ path('login_check') }}" method="post">
+    <label for="username">{{'login'|trans|capitalize}} :</label>
+    <input type="text" id="username" name="_username" value="{{ last_username }}" />
+
+    <label for="password">{{'password'|trans|capitalize}} :</label>
+    <input type="password" id="password" name="_password" />
+
+    {#
+        Si vous voulez controler l'URL vers laquelle l'utilisateur est redirigé en cas de succès
+        (plus de détails ci-dessous)
+        <input type="hidden" name="_target_path" value="/account" />
+    #}
+
+    <div><button type="submit" class="btn btn-large btn-primary">login</button></div>
+</form>
+{% endblock %}

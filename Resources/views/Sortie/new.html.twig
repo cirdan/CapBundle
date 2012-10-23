@@ -1,0 +1,65 @@
+{% extends 'SFCapBundle::cap.html.twig' %}
+{% form_theme form _self %}
+{% block choice_widget_collapsed %}
+{% spaceless %}
+    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %} class="input-small">
+        {% if empty_value is not none %}
+            <option value="">{{ empty_value|trans({}, translation_domain) }}</option>
+        {% endif %}
+        {% if preferred_choices|length > 0 %}
+            {% set options = preferred_choices %}
+            {{ block('choice_widget_options') }}
+            {% if choices|length > 0 and separator is not none %}
+                <option disabled="disabled">{{ separator }}</option>
+            {% endif %}
+        {% endif %}
+        {% set options = choices %}
+        {{ block('choice_widget_options') }}
+    </select>
+{% endspaceless %}
+{% endblock choice_widget_collapsed %}
+{% block body %}
+<h1>
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+{% set username = app.user.firstname|capitalize %}
+{{ 'runs.add.title'|trans({'%name%': username }) }}
+{% else %}
+{{ 'runs.add.title.anonymous'|trans }}
+{% endif %}
+</h1>
+<form action="{{ path('sortie_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+
+
+<div>
+    {{ form_label(form.duration) }}
+    {{ form_errors(form.duration) }}
+    <div class="input-append">{{ form_widget(form.duration, { 'attr': {'class': 'input-mini'} }) }}<span class="add-on">{{'minutes'|trans }}</span></div>
+</div>
+<div>
+    {{ form_label(form.distance) }}
+    {{ form_errors(form.distance) }}
+    <div class="input-append">{{ form_widget(form.distance, { 'attr': {'class': 'input-mini'} }) }}<span class="add-on">{{'meters'|trans}}</span></div>
+</div>
+<div>
+    {{ form_label(form.date) }}
+    {{ form_errors(form.date) }}
+    {{ form_widget(form.date) }}
+</div>
+    {{ form_rest(form) }}
+
+
+
+
+    <button type="submit" class="btn btn-primary btn-large">{{'run.add'|trans}}</button>
+</form>
+
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('sortie') }}">
+            {{ 'runs.list'|trans }}
+        </a>
+    </li>
+</ul>
+{% endblock %}

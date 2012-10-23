@@ -1,0 +1,26 @@
+parameters:
+    caprunner.class: SF\CapBundle\Entity\CapRunner
+    caprunner_factory.class: SF\CapBundle\CapRunnerFactory
+services:
+    CapRunner:
+        class:          %caprunner.class%
+        factory_class:  %caprunner_factory.class%
+        factory_method: get
+        arguments: 
+            secucontext: "@security.context"
+            session: "@session"
+            em: "@doctrine.orm.entity_manager"
+            create: false
+    NewCapRunner:
+        class:          %caprunner.class%
+        factory_class:  %caprunner_factory.class%
+        factory_method: get
+        arguments: 
+            secucontext: "@security.context"
+            session: "@session"
+            em: "@doctrine.orm.entity_manager"
+            create: true
+    #twig.extension.myrunner:
+    #    class: SF\CapBundle\Twig\SFCapTwigExtension
+    #    tags:
+    #        - { name: twig.extension, priority: -255 }

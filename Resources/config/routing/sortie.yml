@@ -1,0 +1,48 @@
+sortie:
+    pattern:  /
+    defaults: { _controller: "SFCapBundle:Sortie:index" }
+
+sortie_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "SFCapBundle:Sortie:show" }
+
+sortie_new:
+    pattern:  /new
+    defaults: { _controller: "SFCapBundle:Sortie:new" }
+
+sortie_create:
+    pattern:  /create
+    defaults: { _controller: "SFCapBundle:Sortie:create" }
+    requirements: { _method: post }
+
+sortie_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "SFCapBundle:Sortie:edit" }
+
+sortie_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "SFCapBundle:Sortie:update" }
+    requirements: { _method: post }
+
+sortie_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "SFCapBundle:Sortie:delete" }
+    requirements: { _method: post }
+sortie_resume:
+    pattern:  /resume
+    defaults: { _controller: "SFCapBundle:Sortie:resume" }
+sortie_resume_jour:
+    pattern:  /resumeJour
+    defaults: { _controller: "SFCapBundle:Sortie:resumeJour" }
+sorties_plotterData:
+    pattern:  /plotterData
+    defaults: { _controller: "SFCapBundle:Sortie:plotterData" }
+    requirements:
+        _method: post
+        nbDays: \d+
+        date: "[0-9]{4,}-[0-9/]{2,}-[0-9]{2,}"
+sortie_collectiveData:
+    pattern:   /sortie/collectiveData
+    defaults:  { _controller: SFCapBundle:Default:collectiveData }
+    #requirements:
+    #    _method:  POST

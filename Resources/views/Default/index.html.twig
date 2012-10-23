@@ -1,0 +1,80 @@
+{% extends 'SFCapBundle::cap.html.twig' %}
+{% block body %}
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="row-fluid" id="firstLine">
+          {% include 'SFCapBundle:Default:firstline.html.twig' with {'runner': runner} %}
+          <!--<div class="well span3">
+            <h2>Restez en forme(s) !</h2>
+            <p>(Pour)suivez vos kilos.</p>
+            <p>
+              <a class="btn" href="{{ path('weight_new') }}"><i class="icon-download-alt"></i> Saisir votre poids</a>
+              <a class="btn" href="{{ path('weight') }}"><i class="icon-list-alt"></i> Suivez l'évolution</a>
+            </p>
+          </div>-->
+        </div>
+      </div><!--/span-->
+    </div>
+    <div id="summaryContainer" class="" style="position:relative">
+      <button id="SFSliderPlus"  class="btn btn-mini" type="button"><i class="icon-fast-backward"></i></button>
+      <button id="SFSliderMoins"  class="btn btn-mini" type="button"><i class="icon-fast-forward"></i></button>
+      <div style="position:relative;overflow:hidden;">
+        <div id="summaryInner" style="">
+          <ul class="thumbnails" id="summary">
+            {% if  (is_granted('IS_AUTHENTICATED_FULLY')==false) and not (runner.hasData is defined) %}
+              {% include 'SFCapBundle:Default:collectiveData.html.twig' with {'runner': runner} %}
+            {% else %}
+              {% if totalLast7days %}
+              <li class=" well">
+              <p>Vous avez couru<span class="keyNumber">{{totalLast7days|number_format(2, '.', ' ')}} km</span>en 7 jours</p>
+              </li>
+              {% endif %}
+              {% if totalLast30days > totalLast7days %}
+              <li class="well">
+              <p>Vous avez couru<span class="keyNumber">{{totalLast30days|number_format(2, '.', ' ')}} km</span>en 30 jours</p>
+              </li>
+              {% endif %}
+              {% if totalLast365days > totalLast30days %}
+              <li class="well">
+              <p>Vous avez couru<span class="keyNumber">{{totalLast365days|number_format(2, '.', ' ')}} km</span>en 1 an</p>
+              </li>
+              {% endif %}
+              {% if totalLastdays > totalLast365days %}
+              <li class="well">
+              <p>Vous avez couru<span class="keyNumber">{{totalLastdays|number_format(2, '.', ' ')}} km</span>depuis l'inscription</p>
+              </li>
+              {% endif %}
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div> 
+    <div class="row-fluid" id="">
+      <div class="" style="position:relative">
+        <button id="PlotterMoins"  class="btn btn-mini" type="button"><i class="icon-fast-backward"></i></button>
+        <button id="PlotterPlus"  class="btn btn-mini" type="button"><i class="icon-fast-forward"></i></button>
+        <div class="" style="" id="visualPlots">
+        </div>
+      </div><!--/span-->
+    </div><!--/row-->
+<script>
+$(window).resize(function() {
+  drawPlots("visualPlots",$('#summaryContainer').width(),'{{ "now"|date("Y-m-d") }}',Math.floor($('#summaryContainer').width()/50));
+  equalizeHeight("#firstLine .well");
+});
+$(document).ready(function() {
+  drawPlots("visualPlots",$('#summaryContainer').width(),'{{ "now"|date("Y-m-d") }}',Math.floor($('#summaryContainer').width()/50))});
+  $('#PlotterPlus').click(function(){
+    drawPlots("visualPlots",$('#summaryContainer').width(),$('#PlotterPlus').attr('date'),'forward');
+  });
+  $('#loadCollectiveData').click(function(){
+    loadCollectiveData();
+  });
+  $('#PlotterMoins').click(function(){
+    drawPlots("visualPlots",$('#summaryContainer').width(),$('#PlotterMoins').attr('date'));
+  });
+
+CAPSlider=new SFslider();
+
+</script>
+{% endblock %}

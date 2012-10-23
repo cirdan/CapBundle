@@ -1,0 +1,3 @@
+user:
+    pattern:  /{name}
+    defaults: { _controller: "SFCapBundle:CapUser:index" }

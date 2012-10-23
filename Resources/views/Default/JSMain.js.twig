@@ -1,0 +1,67 @@
+function drawPlots(container,width,date,way){
+  $('#' + container).html('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>chargement...');
+  $.post('{{ path('sorties_plotterData') }}',
+    {
+      "date": date,
+      "nbDays": Math.floor($('#summaryContainer').width()/80),
+      "way": way
+    },
+    function(data){
+      $('#' + container).empty();
+      if(data.maxValue){
+        var r = Raphael(container,width,80);
+        r.dotchart(0, 0, width, 80, data.xaxis,data.yaxis,data.values, {max: 20, heat: false, axis: '0 0 1 0',axisxtype :' ',axisxstep: data.nbValues, axisxlabels : data.labels, href : data.hrefs }).hover(function () {
+            if(this.value>0){
+              this.marker = this.marker || r.tag(this.x, this.y, this.value+"km", ((this.x>(width/2)) ? 180 : 0), this.r + 2).insertBefore(this);
+              this.marker.show();
+            }
+        }, function () {
+            this.marker && this.marker.hide();
+      });
+      }else{
+        $('#' + container).html('<p style="text-align:center;">Pas de valeurs pour la période du ' + data.beginDate + ' au ' + data.endDate + '</p>');
+      }
+    $('#PlotterPlus').attr('date',data.endDate);
+    $('#PlotterMoins').attr('date',data.beginDate);
+  });
+}
+function loadResume(date,runnerId) {
+  if(!$("#resume" + date).length){
+    $('#summary').append('<li class="well" id="resume' + date + '"><div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>chargement...</li>');
+    equalizeHeight('#summary .well');
+    $.post('{{ path('sortie_resume_jour') }}',{
+       date:date,
+       runnerId:runnerId
+    },function(data){
+        $("#resume" + date).html(data);
+        equalizeHeight('#summary .well');
+        CAPSlider.center("#resume" + date,false);
+    });
+  }else{
+    //On centre
+    CAPSlider.center("#resume" + date,true);
+  }
+}
+function loadCollectiveData() {
+  $('.collectiveData').remove();
+  $('#summary').append('<li class="well" id="collectiveData"><div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>chargement...</li>');
+  equalizeHeight('#summary .well');
+  $.post('{{ path('sortie_collectiveData') }}',{
+  },function(data){
+      $('#collectiveData').remove();
+      $('#summary').append(data);
+      equalizeHeight('#summary .well');
+      CAPSlider.toEnd();
+      $('#loadCollectiveData').html("Mettre à jour les totaux");
+  });
+}
+function equalizeHeight(selector){
+  if($('body').width()>768){
+    var maxHeight = 0;
+    $(selector).each(function(){
+       if ($(this).height() > maxHeight) { maxHeight = $(this).height(); }
+    });
+    $(selector).height(maxHeight);
+  }
+}
+

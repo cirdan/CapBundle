@@ -1,0 +1,7 @@
+<h2>Dernière sortie</h2>
+<ul class="unstyled">
+	<li><i class="icon-calendar"></i> {{lastRun.date|localeDate}}</li>
+	<li><i class="icon-time"></i> {{lastRun.duration}} minutes</li>
+	<li><i class="icon-road"></i> {{(lastRun.distance/1000)|number_format(1, ',', '')}} km </li>
+	<li><i class="icon-forward"></i> {{lastRun.speed|date("%i:%S") }}/km</li>
+</ul>

@@ -1,0 +1,56 @@
+header:
+  application.name: "Suivi course à pied"
+  anonymous.browsing: "Utilisation anonyme"
+  link.log.out: "déconnexion"
+  hello: "Bonjour"
+  link:
+    log.in: "Connexion"
+    home: "Accueil"
+    about: "À propos"
+    contact: "Contact"
+run:
+  edit.title: 'Modifier une sortie'
+  edit: 'Modifier cette sortie'
+  form:
+    date: 'Date'
+    time: 'Heure'
+    duration: 'Durée (en minutes)'
+    comment: 'Commentaire'
+    distance: 'Distance (en mètres)'
+  date: 'Date'
+  erase: 'Effacer cette sortie'
+  add: 'Ajouter cette sortie'
+runs:
+  list: 'Liste des sorties'
+  add.title: 'Ajout d''une sortie pour %name%'
+  add.title.anonymous: 'Ajout d''une sortie'
+  user:
+    list: 'Liste de vos sorties'
+  table:
+    date: 'Date'
+    duration: 'Durée'
+    distance: 'Distance'
+    actions: 'Actions'
+    show: 'Détail'
+    edit: 'Modifier'
+  create.new: 'Ajouter une sortie'
+January: 'Janvier'
+February: 'Février'
+March: 'Mars'
+April: 'Avril'
+May: 'Mai'
+June: 'Juin'
+July: 'Juillet'
+August: 'Août'
+September: 'Septembre'
+October: 'Octobre'
+November: 'Novembre'
+December: 'Décembre'
+meters: 'mètres'
+minutes: 'minutes'
+login: 'email'
+password: 'mot de passe'
+'Symfony2 is great': 'J''aime Symfony2'
+sorties.list: 'Liste des sorties'
+sorties.erase: 'Effacer cette sortie'
+

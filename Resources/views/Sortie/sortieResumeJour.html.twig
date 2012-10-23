@@ -1,0 +1,15 @@
+{% if dayRuns|length > 1 %}
+<strong>{{dayRuns|length}} sorties !</strong>
+{% endif %}
+<div class="caldate">
+	<span class="weekDay">{{date|weekDay}}</span>
+	<span class="monthDay">{{date|monthDay}}</span>
+	<span class="month">{{date|month}}</span>
+</div>
+{% for run in dayRuns %}
+<ul class="unstyled" style="width:220px;">
+	<li><i class="icon-time"></i> {{run.duration}} minutes</li>
+	<li><i class="icon-road"></i> {{(run.distance/1000)|number_format(1, ',', '')}} km </li>
+	<li><i class="icon-forward"></i> {{run.speed|date("%i:%S") }}/km</li>
+</ul>
+{% endfor %}

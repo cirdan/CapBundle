@@ -1,0 +1,79 @@
+body{
+	font-family: 'Montserrat Alternates', sans-serif;
+}
+.keyNumberContainer{
+}
+.keyNumber{
+	font-size:3em;
+	font-weight:bold;
+	line-height:1em;
+	display:block;
+}
+.pave{
+	float:left;
+}
+.caldate {
+	float:right;
+	background-color:white;
+	text-align:center;
+	width:65px;
+}
+.caldate span{
+	display:block;
+}
+.caldate .weekDay{
+	font-size:.7em;
+	background-color:#fcc;
+	padding:0px 4px 0px 4px;
+}
+.caldate .monthDay{
+	font-size:2.5em;
+	font-weight:bold;
+	padding:6px 0px 2px 0px;
+}
+.caldate .month{
+	font-size:.6em;
+}
+#summaryInner{
+	width: 999999px; 
+	position: relative; 
+	overflow: hidden;
+}
+#SFSliderPlus{
+	position:absolute;
+	left:-5px;
+	top:70%;
+	z-index:100;	
+	display:none;
+}
+#SFSliderMoins{
+	position:absolute;
+	right:-5px;
+	top:70%;
+	z-index:100;
+	display:none;
+}
+#PlotterPlus{
+	position:absolute;
+	right:-5px;
+	top:30%;
+	z-index:100;	
+}
+#PlotterMoins{
+	position:absolute;
+	left:-5px;
+	top:30%;
+	z-index:100;
+}
+@media(max-width:768px){
+	#summaryInner{
+		width:100%;
+		left:0px;
+	}
+	#SFSliderPlus{
+		display:none;
+	}
+	#SFSliderMoins{
+		display:none;
+	}
+}

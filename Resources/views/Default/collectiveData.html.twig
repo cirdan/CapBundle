@@ -1,0 +1,20 @@
+{% if totalLast7days %}
+<li class="well collectiveData">
+<p>tous les utilisateurs ont couru<span class="keyNumber">{{totalLast7days|number_format(2, '.', ' ')}} km</span>en 7 jours</p>
+</li>
+{% endif %}
+{% if totalLast30days > totalLast7days %}
+<li class="well collectiveData">
+<p>tous les utilisateurs ont couru<span class="keyNumber">{{totalLast30days|number_format(2, '.', ' ')}} km</span>en 30 jours<br /></p>
+</li>
+{% endif %}
+{% if totalLast365days > totalLast30days %}
+<li class="well collectiveData">
+<p>tous les utilisateurs ont couru<span class="keyNumber">{{totalLast365days|number_format(2, '.', ' ')}} km</span>en 1 an<br /></p>
+</li>
+{% endif %}
+{% if totalLastdays > totalLast365days %}
+<li class="well collectiveData">
+<p>tous les utilisateurs ont couru<span class="keyNumber">{{totalLastdays|number_format(2, '.', ' ')}} km</span>depuis leur inscription<br /></p>
+</li>
+{% endif %}

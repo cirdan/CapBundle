@@ -1,0 +1,43 @@
+header:
+  application.name: "Running logs"
+  link.log.out: "logout"
+  hello: "Hi"
+  link:
+    log.in: "log in"
+    home: "Home"
+    about: "About"
+    contact: "Contact"
+run:
+  edit.title: 'Edit a run'
+  edit: 'Edit this run'
+  form:
+    date: 'Date'
+    time: 'Time'
+    duration: 'Duration (in minutes)'
+    comment: 'Comment'
+    distance: 'Distance (in meters)'
+  date: 'Date'
+  erase: 'Erase this run'
+  add: 'Add this run'
+runs:
+  list: 'List of runs'
+  add.title: 'New run for %name%'
+  add.title.anonymous: 'New run'
+  user:
+    list: 'List of your runs'
+  table:
+    date: 'Date'
+    duration: 'Duration'
+    distance: 'Distance'
+    actions: 'Actions'
+    show: 'Show'
+    edit: 'Edit'
+  create.new: 'Add a run'
+meters: 'meters'
+minutes: 'minutes'
+login: 'email'
+password: 'password'
+'Symfony2 is great': 'J''aime Symfony2'
+sorties.list: 'Runs list'
+sorties.erase: 'Erase this run'
+

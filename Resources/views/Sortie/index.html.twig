@@ -1,0 +1,37 @@
+{% extends 'SFCapBundle::cap.html.twig' %}
+{% block body %}
+<h1>{{'runs.user.list'|trans}}</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>{{'runs.table.date'|trans}}</th>
+            <th>{{'runs.table.duration'|trans}}</th>
+            <th>{{'runs.table.distance'|trans}}</th>
+            <th>{{'runs.table.actions'|trans}}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{% if entity.date %}{{ entity.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>{{ entity.duration }} min</td>
+            <td>{{ entity.distance }} m</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('sortie_show', { 'id': entity.id }) }}">{{'runs.table.show'|trans}}</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('sortie_edit', { 'id': entity.id }) }}">{{'runs.table.edit'|trans}}</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<a href="{{ path('sortie_new') }}" class="btn btn-primary btn-large">
+    <i class="icon-plus icon-white"></i> {{'runs.create.new'|trans}}
+</a>
+{% endblock %}
