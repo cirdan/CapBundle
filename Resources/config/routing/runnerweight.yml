@@ -1,0 +1,30 @@
+weight:
+    pattern:  /
+    defaults: { _controller: "SFCapBundle:RunnerWeight:index" }
+
+weight_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "SFCapBundle:RunnerWeight:show" }
+
+weight_new:
+    pattern:  /new
+    defaults: { _controller: "SFCapBundle:RunnerWeight:new" }
+
+weight_create:
+    pattern:  /create
+    defaults: { _controller: "SFCapBundle:RunnerWeight:create" }
+    requirements: { _method: post }
+
+weight_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "SFCapBundle:RunnerWeight:edit" }
+
+weight_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "SFCapBundle:RunnerWeight:update" }
+    requirements: { _method: post }
+
+weight_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "SFCapBundle:RunnerWeight:delete" }
+    requirements: { _method: post }

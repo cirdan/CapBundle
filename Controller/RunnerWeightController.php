@@ -7,48 +7,48 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use SF\CapBundle\Entity\UserWeight;
-use SF\CapBundle\Form\UserWeightType;
+use SF\CapBundle\Entity\RunnerWeight;
+use SF\CapBundle\Form\RunnerWeightType;
 
 /**
- * UserWeight controller.
+ * RunnerWeight controller.
  *
  */
-class UserWeightController extends Controller
+class RunnerWeightController extends Controller
 {
     /**
-     * Lists all UserWeight entities.
+     * Lists all RunnerWeight entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('SFCapBundle:UserWeight')->findByUser($this->getUser());
+        $entities = $em->getRepository('SFCapBundle:RunnerWeight')->findByUser($this->getUser());
 
         
-        return $this->render('SFCapBundle:UserWeight:index.html.twig', array(
+        return $this->render('SFCapBundle:RunnerWeight:index.html.twig', array(
             'entities' => $entities,
         ));
     }
 
     /**
-     * Finds and displays a UserWeight entity.
+     * Finds and displays a RunnerWeight entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SFCapBundle:UserWeight')->find($id);
+        $entity = $em->getRepository('SFCapBundle:RunnerWeight')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find UserWeight entity.');
+            throw $this->createNotFoundException('Unable to find RunnerWeight entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('SFCapBundle:UserWeight:show.html.twig', array(
+        return $this->render('SFCapBundle:RunnerWeight:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -56,28 +56,28 @@ class UserWeightController extends Controller
     }
 
     /**
-     * Displays a form to create a new UserWeight entity.
+     * Displays a form to create a new RunnerWeight entity.
      *
      */
     public function newAction()
     {
-        $entity = new UserWeight();
-        $form   = $this->createForm(new UserWeightType(), $entity);
+        $entity = new RunnerWeight();
+        $form   = $this->createForm(new RunnerWeightType(), $entity);
 
-        return $this->render('SFCapBundle:UserWeight:new.html.twig', array(
+        return $this->render('SFCapBundle:RunnerWeight:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Creates a new UserWeight entity.
+     * Creates a new RunnerWeight entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity  = new UserWeight();
-        $form = $this->createForm(new UserWeightType(), $entity);
+        $entity  = new RunnerWeight();
+        $form = $this->createForm(new RunnerWeightType(), $entity);
         $form->bind($request);
         $entity->setUser($this->getUser());
 
@@ -89,30 +89,30 @@ class UserWeightController extends Controller
             return $this->redirect($this->generateUrl('weight_show', array('id' => $entity->getId())));
         }
 
-        return $this->render('SFCapBundle:UserWeight:new.html.twig', array(
+        return $this->render('SFCapBundle:RunnerWeight:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing UserWeight entity.
+     * Displays a form to edit an existing RunnerWeight entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SFCapBundle:UserWeight')->find($id);
+        $entity = $em->getRepository('SFCapBundle:RunnerWeight')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find UserWeight entity.');
+            throw $this->createNotFoundException('Unable to find RunnerWeight entity.');
         }
 
-        $editForm = $this->createForm(new UserWeightType(), $entity);
+        $editForm = $this->createForm(new RunnerWeightType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('SFCapBundle:UserWeight:edit.html.twig', array(
+        return $this->render('SFCapBundle:RunnerWeight:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -120,21 +120,21 @@ class UserWeightController extends Controller
     }
 
     /**
-     * Edits an existing UserWeight entity.
+     * Edits an existing RunnerWeight entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SFCapBundle:UserWeight')->find($id);
+        $entity = $em->getRepository('SFCapBundle:RunnerWeight')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find UserWeight entity.');
+            throw $this->createNotFoundException('Unable to find RunnerWeight entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new UserWeightType(), $entity);
+        $editForm = $this->createForm(new RunnerWeightType(), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
@@ -144,7 +144,7 @@ class UserWeightController extends Controller
             return $this->redirect($this->generateUrl('weight_edit', array('id' => $id)));
         }
 
-        return $this->render('SFCapBundle:UserWeight:edit.html.twig', array(
+        return $this->render('SFCapBundle:RunnerWeight:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -152,7 +152,7 @@ class UserWeightController extends Controller
     }
 
     /**
-     * Deletes a UserWeight entity.
+     * Deletes a RunnerWeight entity.
      *
      */
     public function deleteAction(Request $request, $id)
@@ -162,10 +162,10 @@ class UserWeightController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SFCapBundle:UserWeight')->find($id);
+            $entity = $em->getRepository('SFCapBundle:RunnerWeight')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find UserWeight entity.');
+                throw $this->createNotFoundException('Unable to find RunnerWeight entity.');
             }
 
             $em->remove($entity);

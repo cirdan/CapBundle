@@ -60,13 +60,14 @@
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
               {% if app.user %}
-              <a href="{{ path('user', {'name': app.user.username}) }}" class="navbar-link">{{app.user.firstname|capitalize}}</a>
+              <a href="{{ path('fos_user_profile_show', {'name': app.user.username}) }}" class="navbar-link">{{app.user.firstname|capitalize}}</a>
               | <a href="{{ path('logout') }}" class="navbar-link">{{'header.link.log.out'|trans}}</a>
               {% else %}
                 {% if (is_granted('IS_AUTHENTICATED_FULLY')==false) and (runner is defined) and (runner.hasData is defined) and (runner.hasData == true) %}
-                  {{'header.anonymous.browsing'|trans}} | Adresse de votre profil : <a href="{{ path('SFCapBundle_runner_return', {'hash': runner.hash}) }}">http://{{app.request.host}}{{ path('SFCapBundle_runner_return', {'hash': runner.hash}) }}</a>
+                  {% set anonURL = 'http://' ~ app.request.host ~ path('SFCapBundle_runner_return', {'hash': runner.hash}) %}
+                  Adresse de votre profil : <a href="{{ path('SFCapBundle_runner_return', {'hash': runner.hash})}}">{{ anonURL  | stringShorten | raw}}</a>
                 {% else %}
-                  {{'header.anonymous.browsing'|trans}} | <a href="{{ path('login') }}" class="navbar-link">{{'header.link.log.in'|trans}}</a>
+                  <a href="{{ path('login') }}" class="navbar-link">{{'header.link.log.in'|trans}}</a>
                 {% endif %}
               {% endif %}
             </p>
@@ -80,16 +81,6 @@
       </div>
     </div>
 <div class="container-fluid">
-  {% if (is_granted('IS_AUTHENTICATED_FULLY')==false) and (runner is defined) and (runner.hasData is defined) and (runner.hasData == true) %}
-  <div class="row-fluid">
-    <div class="span12 alert">
-      <button type="button" class="close" data-dismiss="alert">×</button>
-      <div class="">
-        <p>Ces données ne sont pas les votres ? <a href="{{ path('SFCapBundle_runner_bye') }}">cliquez ici</a></p>
-      </div>
-    </div>
-  </div>   
-  {% endif %}
   {% block body %}{% endblock %}
   <hr />
   <footer>
@@ -100,9 +91,11 @@
 <script>
 $(function(){
   equalizeHeight("#firstLine .well");
+  addToFavorites(".addToFavorites");
 });
 </script>
 <script type="text/javascript">
+  // UserVoice
   var uvOptions = {};
   (function() {
     var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;

@@ -22,7 +22,7 @@ class RunnerWeight
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SF\CapBundle\Entity\CapRunner", inversedBy="RunnerWeights")
+     * @ORM\ManyToOne(targetEntity="SF\CapBundle\Entity\CapRunner", inversedBy="runnerWeights")
      * @ORM\JoinColumn(name="runner_id", referencedColumnName="id")
      */
     protected $runner;

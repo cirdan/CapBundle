@@ -2,7 +2,7 @@
 
 namespace SF\CapBundle\Entity;
 
-use SF\CapBundle\Entity\CapUserRepository;
+use SF\CapUserBundle\Entity\CapUserRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 

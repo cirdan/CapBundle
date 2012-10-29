@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Sortie
 {
     /**
-     * @ORM\ManyToOne(targetEntity="SF\CapBundle\Entity\CapRunner", inversedBy="Sorties")
+     * @ORM\ManyToOne(targetEntity="SF\CapBundle\Entity\CapRunner", inversedBy="sorties")
      * @ORM\JoinColumn(name="runner_id", referencedColumnName="id")
      */
     protected $runner;

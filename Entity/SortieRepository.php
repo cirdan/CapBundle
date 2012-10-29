@@ -118,7 +118,9 @@ class SortieRepository extends EntityRepository
                 ->setParameter('runner', $runner);
             $query = $qb->getQuery();
             $results=$query->getResult();
-            return array_pop($results);
+            if($results){
+                return array_pop($results);
+            }
         }
         return null;
     }

@@ -4,8 +4,9 @@ namespace SF\CapBundle;
 use Doctrine\ORM\Mapping as ORM;
 use SF\CapBundle\Entity\CapRunner;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\DependencyInjection\ContainerAware;
 
-class CapRunnerFactory
+class CapRunnerFactory extends ContainerAware
 {    
 	static function get($secucontext,$session,$em,$create)
     {

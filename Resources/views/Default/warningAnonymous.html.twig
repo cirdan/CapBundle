@@ -1,0 +1,22 @@
+{% if (is_granted('IS_AUTHENTICATED_FULLY')==false) and (runner is defined) and (runner.hasData is defined) and (runner.hasData == true) %}
+<div class="row-fluid" id="anonymousInfo">
+  <div class="span3 info">
+    <p class="">
+      <span class="label label-warning">Attention !</span>
+      Vous utilisez le service anonyme.
+      <span>Pour sécuriser vos données, <a href="{{ path('cap_user_register') }}">créez un compte</a></span>
+    </p>
+  </div>
+  <div class="span3 info">
+    <p class="">
+      Pour continuer à utiliser <a href="{{ anonURL }}">l'adresse anonyme</a>,<br />
+      <span class="addToFavorites" title="Mon profil CAP" href="{{ anonURL }}"><i class="icon-bookmark"></i> ajoutez la à vos favoris</button>
+    </p>
+  </div>
+  <div class="span3 offset3" id="notMyData">
+    <p class="">
+      Ces données ne sont pas à vous&nbsp;:&nbsp;<a href="{{ path('SFCapBundle_runner_bye') }}">cliquez ici</a>
+    </p>
+  </div>
+</div>   
+{% endif %}

@@ -1,5 +1,6 @@
 {% extends 'SFCapBundle::cap.html.twig' %}
 {% block body %}
+  {% include 'SFCapBundle:Default:warningAnonymous.html.twig' with {'runner': runner} %}
     <div class="row-fluid">
       <div class="span12">
         <div class="row-fluid" id="firstLine">

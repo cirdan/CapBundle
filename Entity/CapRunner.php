@@ -2,7 +2,7 @@
 namespace SF\CapBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use SF\CapBundle\Entity\CapUser;
+#use SF\CapUserBundle\Entity\CapUser;
 
 
 /**

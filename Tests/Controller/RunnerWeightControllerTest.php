@@ -4,7 +4,7 @@ namespace SF\CapBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class UserWeightControllerTest extends WebTestCase
+class RunnerWeightControllerTest extends WebTestCase
 {
     /*
     public function testCompleteScenario()
@@ -19,7 +19,7 @@ class UserWeightControllerTest extends WebTestCase
 
         // Fill in the form and submit it
         $form = $crawler->selectButton('Create')->form(array(
-            'userweight[field_name]'  => 'Test',
+            'runnerweight[field_name]'  => 'Test',
             // ... other fields to fill
         ));
 
@@ -33,7 +33,7 @@ class UserWeightControllerTest extends WebTestCase
         $crawler = $client->click($crawler->selectLink('Edit')->link());
 
         $form = $crawler->selectButton('Edit')->form(array(
-            'userweight[field_name]'  => 'Foo',
+            'runnerweight[field_name]'  => 'Foo',
             // ... other fields to fill
         ));
 

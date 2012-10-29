@@ -1,11 +1,8 @@
 SFCapBundle_sortie:
         resource: "@SFCapBundle/Resources/config/routing/sortie.yml"
         prefix:   /sortie
-SFCapBundle_user:
-        resource: "@SFCapBundle/Resources/config/routing/capuser.yml"
-        prefix:   /user
-SFCapBundle_user_weight:
-        resource: "@SFCapBundle/Resources/config/routing/userweight.yml"
+SFCapBundle_runner_weight:
+        resource: "@SFCapBundle/Resources/config/routing/runnerweight.yml"
         prefix:   /weight
 SFCapBundle_runner_return:
     pattern: /iamback/{hash}
@@ -20,7 +17,7 @@ logout:
     pattern:   /logout
 login:
     pattern:   /login
-    defaults:  { _controller: SFCapBundle:CapSecurity:login }
+    defaults:  { _controller: SFCapUserBundle:Security:login }
 SFCapBundle_runner_bye:
     pattern: /runner/bye
     defaults:  { _controller: SFCapBundle:CapRunner:bye }
