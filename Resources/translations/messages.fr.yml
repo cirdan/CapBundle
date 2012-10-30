@@ -53,4 +53,6 @@ password: 'mot de passe'
 'Symfony2 is great': 'J''aime Symfony2'
 sorties.list: 'Liste des sorties'
 sorties.erase: 'Effacer cette sortie'
+Firstname: 'Prénom'
+Lastname: 'Nom'
 
