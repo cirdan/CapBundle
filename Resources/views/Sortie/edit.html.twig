@@ -1,5 +1,5 @@
 {% extends 'SFCapBundle::cap.html.twig' %}
-{% block body %}
+{% block content %}
 <h1>{{"run.edit.title"|trans}}</h1>
 
 <form action="{{ path('sortie_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>

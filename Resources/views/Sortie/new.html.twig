@@ -18,7 +18,7 @@
     </select>
 {% endspaceless %}
 {% endblock choice_widget_collapsed %}
-{% block body %}
+{% block content %}
 <h1>
 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 {% set username = app.user.firstname|capitalize %}

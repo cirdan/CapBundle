@@ -1,53 +1,5 @@
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <title>{{'header.application.name'|trans}}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Le styles -->
-    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <style type="text/css">
-      body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-      }
-      .sidebar-nav {
-        padding: 9px 0;
-      }
-    </style>
-    <link href="/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/js/jquery.js"></script>
-    <script src="/js/jquery-effects.js"></script>
-    <script src="/js/raphael-min.js"></script>
-    <script src="/js/g.raphael-min.js"></script>
-    <script src="/js/jquery.animate-shadow-min.js"></script>
-    <script src="/js/g.dot-min.js"></script>
-    <script src="/js/g.line-min.js"></script>
-    <script src="/bundles/sfcap/js/SFSlider.js"></script>
-    <script src="{{ path('SFCap_js_main') }}"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
-    <link href="/bundles/sfcap/css/cap.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Montserrat+Alternates:400,700' rel='stylesheet' type='text/css' />
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-35786216-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-  </head>
-
-  <body>
+{% extends '::base.html.twig' %}
+{% block body %}
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
@@ -81,7 +33,7 @@
       </div>
     </div>
 <div class="container-fluid">
-  {% block body %}{% endblock %}
+  {% block content %}{% endblock %}
   <hr />
   <footer>
     <p>&copy; SF 2012</p>
@@ -103,6 +55,4 @@ $(function(){
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
   })();
 </script>
-</body>
-
-</html>
+{% endblock %}
