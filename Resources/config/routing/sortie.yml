@@ -44,5 +44,9 @@ sorties_plotterData:
 sortie_collectiveData:
     pattern:   /sortie/collectiveData
     defaults:  { _controller: SFCapBundle:Default:collectiveData }
+sortie_geoTracker:
+    pattern: /geoTracker
+    defaults:  { _controller: SFCapBundle:GeoTracker:index }
+
     #requirements:
     #    _method:  POST

@@ -1,0 +1,23 @@
+{% extends 'SFCapBundle::cap.html.twig' %}
+{% block content %}
+  Bonjour.
+  <table class="table">
+    <thead>
+      <tr>
+        <th>latitude</th>
+        <th>longitude</th>
+      </tr>
+    </thead>
+    <tbody id="xylist">
+    </tbody>
+  </table>
+  <script>
+  $(navigator.geolocation.watchPosition(function(position) {
+    store(position.coords.latitude, position.coords.longitude);
+  }));
+
+function store(x,y){
+  $("#xylist").append("<tr><td>" + x + "</td><td>" + y + "</td></tr>");
+}
+  </script>
+{% endblock %}
