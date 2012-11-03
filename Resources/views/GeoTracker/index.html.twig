@@ -1,5 +1,6 @@
 {% extends 'SFCapBundle::cap.html.twig' %}
 {% block content %}
+<script src="https://raw.github.com/andris9/jStorage/master/jstorage.js"></script>
   <button class="btn btn-primary btn-large" id="chronoBtn">Démarrer</button>
   <div id="chrono">
     <span class="digits" id="hours">0</span>:<span class="digits" id="minutes">00</span>:<span class="digits" id="seconds">00</span>
@@ -9,6 +10,7 @@
       <tr>
         <th>latitude</th>
         <th>longitude</th>
+        <th>distance</th>
       </tr>
     </thead>
     <tbody id="xylist">
@@ -34,6 +36,7 @@
       },1000); 
     }
   }
+  var geolocValues=new Array();
   var pauseChrono = function(){
   }
   $("#chronoBtn").click(function(){
@@ -49,10 +52,48 @@
   });
 function store(x,y){
   if(x && y){
-    $("#xylist").append("<tr><td>" + x + "</td><td>" + y + "</td></tr>");
+    // Distance avec la précédente :
+    if($("#xylist .step:last").length){
+      var lastLat=$("#xylist .step:last .latitude").html();
+      var lastLon=$("#xylist .step:last .longitude").html();
+      var stepDistance=distance(lastLat,lastLon,x,y);
+      var totalDistance=$("#xylist .step:last .totalDistance").html()*1.0+stepDistance;
+    }else{
+      var stepDistance=0;
+      var totalDistance=0;
+    }
+    //On affiche
+    if($("#xylist .step:last").length){
+      $("#xylist .step:last").remove();
+    }
+    $("#xylist").append("<tr class=\"step\"><td class=\"latitude\">" + x + "</td><td class=\"longitude\">" + y + "</td><td class=\"stepDistance\">" + stepDistance + "</td><td class=\"totalDistance\">" + totalDistance + "</td></tr>");
+    // On mémorise
+    geolocValues.push(new Array(x,y));
+    $.jStorage.set("geoloc",geolocValues);
   }else{
     $("#xylist").append("<tr><td>inconnu</td><td>inconnu</td></tr>");
   }
 }
+function distance(lat1,lon1,lat2,lon2) {
+  var R = 6371; // km (change this constant to get miles)
+  var dLat = (lat2-lat1) * Math.PI / 180;
+  var dLon = (lon2-lon1) * Math.PI / 180;
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+  Math.cos(lat1 * Math.PI / 180 ) * Math.cos(lat2 * Math.PI / 180 ) *
+  Math.sin(dLon/2) * Math.sin(dLon/2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var d = R * c;
+  if (d>1) return Math.round(d)*1000;
+  else if (d<=1) return Math.round(d*1000);
+  return 0;
+}
+store("10","20");
+store("11","20");
+store("12","20");
+store("13","20");
+store("14","20");
+store("15","20");
+alert($.jStorage.get("geoloc"));
+
   </script>
 {% endblock %}
