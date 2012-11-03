@@ -1,6 +1,9 @@
 {% extends 'SFCapBundle::cap.html.twig' %}
 {% block content %}
-  Bonjour.
+  <button class="btn btn-primary btn-large" id="chronoBtn">Démarrer</button>
+  <div id="chrono">
+    <span class="digits" id="hours">0</span>:<span class="digits" id="minutes">00</span>:<span class="digits" id="seconds">00</span>
+  </div>
   <table class="table">
     <thead>
       <tr>
@@ -15,9 +18,41 @@
   $(navigator.geolocation.watchPosition(function(position) {
     store(position.coords.latitude, position.coords.longitude);
   }));
-
+  var chronoIsRunning=false;
+  var runSeconds=0;
+  var runChrono = function(){
+    if(chronoIsRunning){
+      var hours=Math.floor(runSeconds/(3600));
+      var minutes=Math.floor((runSeconds-hours*3600)/(60));
+      var seconds=(runSeconds-minutes*60-hours*3600);
+      $("#seconds").html(seconds);
+      $("#minutes").html(minutes);
+      $("#hours").html(hours);
+      runSeconds++;
+      setTimeout(function(){
+        runChrono();
+      },1000); 
+    }
+  }
+  var pauseChrono = function(){
+  }
+  $("#chronoBtn").click(function(){
+    if(chronoIsRunning){
+      chronoIsRunning=false;
+      pauseChrono();
+      $("#chronoBtn").html("reprendre");
+    }else{
+      chronoIsRunning=true;
+      runChrono();
+      $("#chronoBtn").html("pause");
+    }
+  });
 function store(x,y){
-  $("#xylist").append("<tr><td>" + x + "</td><td>" + y + "</td></tr>");
+  if(x && y){
+    $("#xylist").append("<tr><td>" + x + "</td><td>" + y + "</td></tr>");
+  }else{
+    $("#xylist").append("<tr><td>inconnu</td><td>inconnu</td></tr>");
+  }
 }
   </script>
 {% endblock %}
