@@ -9,9 +9,10 @@
     <thead>
       <tr>
         <th>#</th>
+        <th>distance</th>
+        <th>total</th>
         <th>latitude</th>
         <th>longitude</th>
-        <th>distance</th>
       </tr>
     </thead>
     <tbody id="xylist">
@@ -70,7 +71,7 @@ function store(x,y){
     if($("#xylist .step:first").length){
       //$("#xylist .step:first").remove();
     }
-    $("#xylist").prepend("<tr class=\"step\"><td class=\"stepNumber\">" + (lastStep*1.0+1) + "</td><td class=\"latitude\">" + x + "</td><td class=\"longitude\">" + y + "</td><td class=\"stepDistance\">" + stepDistance + "</td><td class=\"totalDistance\">" + totalDistance + "</td></tr>");
+    $("#xylist").prepend("<tr class=\"step\"><td class=\"stepNumber\">" + (lastStep*1.0+1) + "</td><td class=\"stepDistance\">" + stepDistance + "</td><td class=\"totalDistance\">" + totalDistance + "</td><td class=\"latitude\">" + x + "</td><td class=\"longitude\">" + y + "</td></tr>");
     // On mémorise
     geolocValues.push(new Array(x,y));
     $.jStorage.set("geoloc",geolocValues);
