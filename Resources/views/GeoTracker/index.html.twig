@@ -8,6 +8,7 @@
   <table class="table">
     <thead>
       <tr>
+        <th>#</th>
         <th>latitude</th>
         <th>longitude</th>
         <th>distance</th>
@@ -20,6 +21,7 @@
   $(navigator.geolocation.watchPosition(function(position) {
     store(position.coords.latitude, position.coords.longitude);
   }));
+  $.jStorage.deleteKey("geoloc");
   var chronoIsRunning=false;
   var runSeconds=0;
   var runChrono = function(){
@@ -54,24 +56,26 @@ function store(x,y){
   if(x && y){
     // Distance avec la précédente :
     if($("#xylist .step:last").length){
-      var lastLat=$("#xylist .step:last .latitude").html();
-      var lastLon=$("#xylist .step:last .longitude").html();
+      var lastStep=$("#xylist .step:first .stepNumber").html();
+      var lastLat=$("#xylist .step:first .latitude").html();
+      var lastLon=$("#xylist .step:first .longitude").html();
       var stepDistance=distance(lastLat,lastLon,x,y);
-      var totalDistance=$("#xylist .step:last .totalDistance").html()*1.0+stepDistance;
+      var totalDistance=$("#xylist .step:first .totalDistance").html()*1.0+stepDistance;
     }else{
       var stepDistance=0;
       var totalDistance=0;
+      var lastStep=0;
     }
     //On affiche
-    if($("#xylist .step:last").length){
-      $("#xylist .step:last").remove();
+    if($("#xylist .step:first").length){
+      //$("#xylist .step:first").remove();
     }
-    $("#xylist").append("<tr class=\"step\"><td class=\"latitude\">" + x + "</td><td class=\"longitude\">" + y + "</td><td class=\"stepDistance\">" + stepDistance + "</td><td class=\"totalDistance\">" + totalDistance + "</td></tr>");
+    $("#xylist").prepend("<tr class=\"step\"><td class=\"stepNumber\">" + (lastStep*1.0+1) + "</td><td class=\"latitude\">" + x + "</td><td class=\"longitude\">" + y + "</td><td class=\"stepDistance\">" + stepDistance + "</td><td class=\"totalDistance\">" + totalDistance + "</td></tr>");
     // On mémorise
     geolocValues.push(new Array(x,y));
     $.jStorage.set("geoloc",geolocValues);
   }else{
-    $("#xylist").append("<tr><td>inconnu</td><td>inconnu</td></tr>");
+    $("#xylist").prepend("<tr><td>inconnu</td><td>inconnu</td></tr>");
   }
 }
 function distance(lat1,lon1,lat2,lon2) {
@@ -87,6 +91,9 @@ function distance(lat1,lon1,lat2,lon2) {
   else if (d<=1) return Math.round(d*1000);
   return 0;
 }
-
+/*store(1,1);
+store(2,1);
+store(3,1);
+store(4,1);*/
   </script>
 {% endblock %}
