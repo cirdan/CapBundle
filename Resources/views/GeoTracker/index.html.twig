@@ -1,6 +1,7 @@
 {% extends 'SFCapBundle::cap.html.twig' %}
 {% block content %}
 <script src="https://raw.github.com/andris9/jStorage/master/jstorage.js"></script>
+
   <div id="gpsState"></div>
   <button class="btn btn-primary btn-large" id="chronoBtnStart">Démarrer</button>
   <button class="btn" id="chronoBtnEnd">Terminer</button>
@@ -22,9 +23,17 @@
     </tbody>
   </table>
   <script>
-  var watchId = navigator.geolocation.watchPosition(function(position) {
-      store(position.coords.latitude, position.coords.longitude);
-  });
+  var watchId = navigator.geolocation.watchPosition(
+    function(position) {
+      if(position.coords.accuracy < 5){
+        store(position.coords.latitude, position.coords.longitude);
+      }
+  },
+    function(error){
+      alert(error);
+
+  },
+    {enableHighAccuracy:true});
   //$.jStorage.deleteKey("geoloc");
   var chronoIsRunning=false;
   var runSeconds=0;
@@ -80,10 +89,15 @@ function store(x,y){
       var stepDistance=geoDistance(lastLat,lastLon,x,y);
       var totalDistance=$("#xylist .step:first .totalDistance").html()*1.0+stepDistance;
     }else{
+      $("#xylist").prepend("<tr class=\"step\"><td class=\"stepNumber\">0</td><td class=\"stepDistance\">0</td><td class=\"totalDistance\">0</td><td class=\"latitude\">-</td><td class=\"longitude\">-</td></tr>");
       var stepDistance=0;
       var totalDistance=0;
       var lastStep=0;
       var lastStepDistance=0;
+    }
+    if(stepDistance<5){
+      alert(y);
+      return;
     }
     if(chronoIsRunning){
       //On affiche
@@ -101,7 +115,7 @@ function store(x,y){
         $("#chronoBtnStart").attr("disabled","disabled");
       }else{
         $("#gpsState").html("GPS OK (précision : " + stepDistance + "m)");
-        $("#chronoBtnStart").html("attendez sans vous déplacer svp");
+        $("#chronoBtnStart").html("Démarrer");
         $("#chronoBtnStart").removeAttr("disabled");
       }
     }
@@ -122,9 +136,9 @@ function geoDistance(lat1,lon1,lat2,lon2) {
   else if (d<=1) return Math.round(d*1000);
   return 0;
 }
-/*store(1,1);
+store(1,1);
 store(2,1);
 store(3,1);
-store(4,1);*/
+store(4,1);
   </script>
 {% endblock %}
