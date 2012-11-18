@@ -10,6 +10,7 @@ use SF\CapBundle\Entity\Sortie;
 use SF\CapBundle\Form\SortieType;
 use SF\CapBundle\Entity\CapRunner;
 use SF\CapBundle\Entity\DateTimeFrench;
+use SF\CapBundle\Entity\CapGoalSubscription;
 
 
 
@@ -89,14 +90,18 @@ class SortieController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
+            $this->updateRunnerGoals($entity);
+            $this->updateRunnerBadges($entity);
             //We save the runner to set hasData on
             $runner->setHasData(true);
             $em->persist($runner);
 
             $em->flush();
-
             return $this->redirect($this->generateUrl('sf_cap_homepage'));
+
         }
+
+
 
         return $this->render('SFCapBundle:Sortie:new.html.twig', array(
             'entity' => $entity,
@@ -152,7 +157,8 @@ class SortieController extends Controller
             $em->persist($entity);
 
             $em->flush();
-
+            $this->updateRunnerGoals($entity);
+            $this->updateRunnerBadges($entity);
             return $this->redirect($this->generateUrl('sortie_edit', array('id' => $id)));
         }
 
@@ -255,5 +261,177 @@ class SortieController extends Controller
        return new Response($return,200,array('Content-Type'=>'application/json'));//make sure it has the correct content type
     }
 
+    private function updateRunnerGoals($entity){
+
+        $em = $this->getDoctrine()->getManager();
+
+        // We update the goals completion for the current user
+        // We first get the subscribed AND unreached goals
+        $pending=$em->getRepository('SFCapBundle:CapGoalSubscription')->findPendingByRunner($this->get("CapRunner"));
+        // For each goal, let's see if it has been reached
+        foreach($pending as $subscription){
+            $goal=$subscription->getGoal();
+            $achieved=$this->compareGoalCompletion($entity,$goal);
+            if($achieved){
+                $subscription->setAchievementDate($entity->getDate());
+                $em->persist($subscription);
+                $em->flush();
+            }
+        // Return the reached goals
+        }
+    }
+    private function updateRunnerBadges($entity){
+
+        $em = $this->getDoctrine()->getManager();
+
+        // We update the goals completion for the current user
+        // We first get the subscribed AND unreached goals
+        $pending=$em->getRepository('SFCapBundle:CapGoal')->findPotentialBadgesByRunner($this->get("CapRunner"));
+        // For each goal, let's see if it has been reached
+        foreach($pending as $goal){
+//            echo $goal['goal']."<hr />";
+            $achieved=$this->compareGoalCompletion($entity,$goal['goal']);
+            // Consider scheduled date
+            if($achieved){
+                $subscription=new CapGoalSubscription;
+                $subscription->setRunner($this->get("CapRunner"));
+                $subscription->setGoal($goal['goal']);
+                $subscription->setDate(new \DateTime());
+                $subscription->setAchievementDate($entity->getDate());
+                $em->persist($subscription);
+                $em->flush();
+            }
+        // Return the reached goals
+        }
+//        die($pending);
+    }
+    private function compareGoalCompletion($entity,$goal){
+
+        $em = $this->getDoctrine()->getManager();
+        $achieved=true;
+        if(!$goal->getSum()){
+            if(!$goal->getDelay()){
+                if(!$goal->getDuration()){
+                    if($goal->getDistance()){
+                        if($entity->getDistance()<$goal->getDistance()){
+                            $achieved=false;
+                            echo "raté par distance <br />";
+                        }
+                    }
+                }else{
+                    if($goal->getDistance()){
+                        // We have to consider speed in addition
+                        $goalSpeed=$goal->getDistance()/$goal->getDuration();
+                        $effectiveSpeed=$entity->getDistance()/$entity->getDuration();
+                        if($entity->getDistance()<$goal->getDistance() OR $entity->getDuration()<$goal->getDuration() OR $effectiveSpeed<$goalSpeed){
+                            $achieved=false;
+                            echo "raté par distance ou durée ou vitesse <br />";
+                        }
+                    }else{
+                        if($entity->getDuration()<$goal->getDuration()){
+                            $achieved=false;
+                            echo "raté par durée <br />";
+                        }
+                    }
+                }
+            }else{
+                throw new \Exception('This goal seems misconfigured');
+                /*if(!$goal->getDuration()){
+                    if($goal->getDistance()){
+
+                    }
+                }else{
+                    if($goal->getDistance()){
+
+                    }else{
+                        
+                    }
+                }*/
+            }
+        }else{
+            if(!$goal->getDelay()){
+                $totalDistance=$em->getRepository('SFCapBundle:Sortie')->totalBetween(null,null,$this->get("CapRunner"))*1000;
+                $totalDuration=$em->getRepository('SFCapBundle:Sortie')->totalDurationBetween(null,null,$this->get("CapRunner"));
+                if(!$goal->getDuration()){
+                    if($goal->getDistance()){
+                        if($totalDistance<$goal->getDistance()){
+                            $achieved=false;
+                            echo "raté par cumul duration : objectif : ".$goal->getDuration()." en ".$goal->getDelay()." jours, réalisé : ".$totalDuration."<br />";
+                        }
+                    }
+                }else{
+                    if($goal->getDistance()){
+                        // We have to consider speed in addition
+                        $goalSpeed=$goal->getDistance()/$goal->getDuration();
+                        $effectiveSpeed=$totalDistance/$totalDuration;
+                        if($totalDistance<$goal->getDistance() OR $totalDuration<$goal->getDuration() OR $effectiveSpeed<$goalSpeed){
+                            $achieved=false;
+                            echo "raté par cumul duration ou distance";
+                        }
+                    }else{
+                        if($totalDuration<$goal->getDuration()){
+                            $achieved=false;
+                            echo "raté par cumul duration ou distance";
+                        }
+                    }
+                }
+            }else{
+                $totalDistance=$em->getRepository('SFCapBundle:Sortie')->totalLastDays($goal->getDelay(),$this->get("CapRunner"))*1000;
+                $totalDuration=$em->getRepository('SFCapBundle:Sortie')->totalDurationLastDays($goal->getDelay(),$this->get("CapRunner"));
+                if(!$goal->getDuration()){
+                    if($goal->getDistance()){
+                        if($totalDistance<$goal->getDistance()){
+                            $achieved=false;
+                            echo "raté par cumul duration : objectif : ".$goal->getDuration()." en ".$goal->getDelay()." jours, réalisé : ".$totalDuration."<br />";
+                        }
+                    }
+                }else{
+                    if($goal->getDistance()){
+                        if($totalDistance<$goal->getDistance() OR $totalDuration<$goal->getDuration()){
+                            $achieved=false;
+                            echo "raté par cumul duration ou distance";
+                        }
+                    }else{
+                        if($totalDuration<$goal->getDuration()){
+                            $achieved=false;
+                            echo "raté par cumul duration ou distance";
+                        }
+                    }
+                }
+            }
+        }
+
+        /*if(!$goal->getDelay()){ // We consider a single run : the current one
+            // Consider duration
+            if($goal->getDuration() && $entity->getDuration()<$goal->getDuration()){
+                $achieved=false;
+                echo "raté par durée <br />";
+            }
+            // Consider distance
+            if($goal->getDistance() && $entity->getDistance()<$goal->getDistance()){
+                $achieved=false;
+                echo "raté par distance <br />";
+            }
+        }else{ // We consider multiple runs
+            $totalDistance=$em->getRepository('SFCapBundle:Sortie')->totalLastDays($goal->getDelay(),$this->get("CapRunner"))*1000;
+            $totalDuration=$em->getRepository('SFCapBundle:Sortie')->totalDurationLastDays($goal->getDelay(),$this->get("CapRunner"));
+            // Consider duration
+            if($goal->getDuration() && $totalDuration<$goal->getDuration()){
+                $achieved=false;
+                echo "raté par cumul duration : objectif : ".$goal->getDuration()." en ".$goal->getDelay()." jours, réalisé : ".$totalDuration."<br />";
+            }
+            // Consider distance
+            if($goal->getDistance() && $totalDistance<$goal->getDistance()){
+                $achieved=false;
+                echo "raté par cumul distance : objectif : ".$goal->getDistance()." en ".$goal->getDelay()." jours, réalisé : ".$totalDistance."<br />";
+            }
+        }*/
+        // Consider scheduled date
+        if($achieved){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 }

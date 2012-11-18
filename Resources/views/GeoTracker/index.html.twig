@@ -1,144 +1,43 @@
 {% extends 'SFCapBundle::cap.html.twig' %}
 {% block content %}
-<script src="https://raw.github.com/andris9/jStorage/master/jstorage.js"></script>
-
+<script type="text/javascript" src="https://raw.github.com/andris9/jStorage/master/jstorage.js"></script>
+<script type="text/javascript" src="/bundles/sfcap/js/SFGeoTracker.js"></script>
+<script type="text/javascript" src="/bundles/sfcap/js/SFChronometer.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
   <div id="gpsState"></div>
   <button class="btn btn-primary btn-large" id="chronoBtnStart">Démarrer</button>
-  <button class="btn" id="chronoBtnEnd">Terminer</button>
-
-  <div id="chrono">
-    <span class="digits" id="hours">0</span>:<span class="digits" id="minutes">00</span>:<span class="digits" id="seconds">00</span>
-  </div>
+  <button class="btn btn-primary btn-large" id="chronoBtnStop">Pause</button>
+  <button class="btn" id="chronoBtnReset">RAZ</button>
+  <button class="btn" id="chronoBtnEnd">Tracer la carte</button>
+<script>
+$(function(){
+  $("#chronoBtnEnd").click(function(){
+    CAPGeoTracker.showMap();
+  });
+});
+</script>
+<div id="SFCron"></div>
   <table class="table">
     <thead>
       <tr>
         <th>#</th>
         <th>distance</th>
         <th>total</th>
+        <th>time</th>
         <th>latitude</th>
         <th>longitude</th>
+        <th>accuracy</th>
       </tr>
     </thead>
     <tbody id="xylist">
     </tbody>
   </table>
+<div id="map_canvas" style="width:700px; height:400px;"></div>
   <script>
-  var watchId = navigator.geolocation.watchPosition(
-    function(position) {
-      if(position.coords.accuracy < 5){
-        store(position.coords.latitude, position.coords.longitude);
-      }
-  },
-    function(error){
-      alert(error);
 
-  },
-    {enableHighAccuracy:true});
-  //$.jStorage.deleteKey("geoloc");
-  var chronoIsRunning=false;
-  var runSeconds=0;
-  var runChrono = function(){
-    if(chronoIsRunning){
-      var hours=Math.floor(runSeconds/(3600));
-      var minutes=Math.floor((runSeconds-hours*3600)/(60));
-      var seconds=(runSeconds-minutes*60-hours*3600);
-      $("#seconds").html(seconds);
-      $("#minutes").html(minutes);
-      $("#hours").html(hours);
-      runSeconds++;
-      setTimeout(function(){
-        runChrono();
-      },1000); 
-    }
-  }
-  var geolocValues=new Array();
-  var pauseChrono = function(){
-  }
-  $("#chronoBtnStart").click(function(){
-    if(chronoIsRunning){
-      chronoIsRunning=false;
-      pauseChrono();
-      $("#chronoBtnStart").html("reprendre");
-      $("#chronoBtnEnd").show();
-      $("#chronoBtnEnd").addClass("btn-primary");
-      $("#chronoBtnEnd").addClass("btn-large");
-    }else{
-      chronoIsRunning=true;
-      runChrono();
-      $("#chronoBtnStart").html("pause");
-      $("#chronoBtnEnd").hide();
-      $("#chronoBtnEnd").removeClass("btn-primary");
-      $("#chronoBtnEnd").removeClass("btn-large");
-    }
-  });
-  $("#chronoBtnEnd").click(function(){
-    chronoIsRunning=false;
-    pauseChrono();
-    //$("#chronoBtnStart").remove();
-    //$(this).remove();
-    //$(navigator.geolocation.clearWatch(watchId));
-  });
-function store(x,y){
-  if(x && y){
-    // Distance avec la précédente :
-    if($("#xylist .step:last").length){
-      var lastStep=$("#xylist .step:first .stepNumber").html();
-      var lastStepDistance=$("#xylist .step:first .stepDistance").html();
-      var lastLat=$("#xylist .step:first .latitude").html();
-      var lastLon=$("#xylist .step:first .longitude").html();
-      var stepDistance=geoDistance(lastLat,lastLon,x,y);
-      var totalDistance=$("#xylist .step:first .totalDistance").html()*1.0+stepDistance;
-    }else{
-      $("#xylist").prepend("<tr class=\"step\"><td class=\"stepNumber\">0</td><td class=\"stepDistance\">0</td><td class=\"totalDistance\">0</td><td class=\"latitude\">-</td><td class=\"longitude\">-</td></tr>");
-      var stepDistance=0;
-      var totalDistance=0;
-      var lastStep=0;
-      var lastStepDistance=0;
-    }
-    if(stepDistance<5){
-      alert(y);
-      return;
-    }
-    if(chronoIsRunning){
-      //On affiche
-      if($("#xylist .step:first").length){
-        //$("#xylist .step:first").remove();
-      }
-      $("#xylist").prepend("<tr class=\"step\"><td class=\"stepNumber\">" + (lastStep*1.0+1) + "</td><td class=\"stepDistance\">" + stepDistance + "</td><td class=\"totalDistance\">" + totalDistance + "</td><td class=\"latitude\">" + x + "</td><td class=\"longitude\">" + y + "</td></tr>");
-      // On mémorise
-      geolocValues.push(new Array(x,y));
-      //$.jStorage.set("geoloc",geolocValues);
-    }else{
-      if(stepDistance>1){
-        $("#gpsState").html("acquisition position en cours... ...(précision : " + stepDistance + "m)");
-        $("#chronoBtnStart").html("attendez  sans vous déplacer svp");
-        $("#chronoBtnStart").attr("disabled","disabled");
-      }else{
-        $("#gpsState").html("GPS OK (précision : " + stepDistance + "m)");
-        $("#chronoBtnStart").html("Démarrer");
-        $("#chronoBtnStart").removeAttr("disabled");
-      }
-    }
-  }else{
-    $("#xylist").prepend("<tr><td>inconnu</td><td>inconnu</td></tr>");
-  }
-}
-function geoDistance(lat1,lon1,lat2,lon2) {
-  var R = 6371; // km (change this constant to get miles)
-  var dLat = (lat2-lat1) * Math.PI / 180;
-  var dLon = (lon2-lon1) * Math.PI / 180;
-  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-  Math.cos(lat1 * Math.PI / 180 ) * Math.cos(lat2 * Math.PI / 180 ) *
-  Math.sin(dLon/2) * Math.sin(dLon/2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  var d = R * c;
-  if (d>1) return Math.round(d)*1000;
-  else if (d<=1) return Math.round(d*1000);
-  return 0;
-}
-store(1,1);
-store(2,1);
-store(3,1);
-store(4,1);
+  var CAPGeoTracker=new SFGeoTracker();
+  CAPGeoTracker.accuracy=100;
+  var CAPChrono=new SFChronometer("#SFCron",{buttonStart:"#chronoBtnStart",buttonStop:"#chronoBtnStop",buttonReset:"#chronoBtnReset",displayMsecs:false});
+  CAPGeoTracker.watchPosition();
   </script>
 {% endblock %}

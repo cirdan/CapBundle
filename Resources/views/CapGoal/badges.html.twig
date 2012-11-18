@@ -1,0 +1,84 @@
+{% extends 'SFCapBundle::cap.html.twig' %}
+{% block content %}
+<h1>Badges</h1>
+<p>Les badges sont gagnés automatiquement au fur et à mesure de la saisie des sorties.</p>
+<p>Voici la liste des badges que vous avez obtenus :</p>
+    {% set entNum = 0 %}
+    {% set nbBadgesPerLine = 12 %}{# must be 1 or 2 or 3 or 4 or 6 or 12 #}
+    {% for entity in entities %}
+    {% if entNum is divisibleby(nbBadgesPerLine) %}
+    <div class="row-fluid">
+    <div class="span12">
+    {% endif %}
+    <div class="capBadge span{{ 12/nbBadgesPerLine }}">
+        {% if  entity.isAchieved %}
+        <span class="badge badge-success">{{ entity.goal.name }}</span>
+        {% else %}
+        <span class="badge">{{ entity.goal.name }}</span>
+        {% endif %}
+        {% if  not entity.goal.sum %}
+            {% if not entity.goal.delay %}
+                {% if not entity.goal.duration %}
+                    {% if  entity.goal.distance %}
+                        Couru {{entity.goal.distance / 1000}}km en une fois
+                    {% endif %}
+                {% else %}
+                    {% if  entity.goal.distance %}
+                        Couru plus de {{entity.goal.distance / 1000}}km à moins de {{ entity.goal.speed | date("%i:%S")}} min/km en une fois
+                    {% else %}
+                        Couru plus de {{entity.goal.duration }} minutes en une fois
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                {% if not entity.goal.duration %}
+                    {% if  entity.goal.distance %}
+                        Couru plus de {{entity.goal.distance / 1000}}km sur {{entity.goal.delay}} (ça ne veut rien dire...)
+                    {% endif %}
+                {% else %}
+                    {% if  entity.goal.distance %}
+                        Couru plus de {{entity.goal.distance / 1000}}km en moins de {{entity.goal.duration}} minutes sur {{entity.goal.delay}} jours en une fois (ça ne veut rien dire...)
+                    {% else %}
+                        Couru plus de {{entity.goal.duration }} minutes sur {{entity.goal.delay}} jours en une fois (ça ne veut rien dire...)
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% else %}
+            {% if not entity.goal.delay %}
+                {% if not entity.goal.duration %}
+                    {% if  entity.goal.distance %}
+                        Couru {{entity.goal.distance / 1000}}km au total
+                    {% endif %}
+                {% else %}
+                    {% if  entity.goal.distance %}
+                        Couru plus de {{entity.goal.distance / 1000}}km en moins de {{entity.goal.duration}} minutes au total
+                    {% else %}
+                        Couru plus de {{entity.goal.duration }} minutes au total
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                {% if not entity.goal.duration %}
+                    {% if  entity.goal.distance %}
+                        Couru plus de {{entity.goal.distance / 1000}}km sur {{entity.goal.delay}} jours
+                    {% endif %}
+                {% else %}
+                    {% if  entity.goal.distance %}
+                        Couru plus de {{entity.goal.distance / 1000}}km en moins de {{entity.goal.duration}} minutes sur {{entity.goal.delay}} jours
+                    {% else %}
+                        Couru plus de {{entity.goal.duration }} minutes sur {{entity.goal.delay}} jours
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        <p class="muted">Obtenu le {{entity.isAchieved|localeDate}}</p>
+    </div>
+    {% set entNum = entNum+1 %}
+    {% if entNum is divisibleby(nbBadgesPerLine) %}
+    </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% if entNum is not divisibleby(nbBadgesPerLine) %}
+    </div>
+    </div>
+    {% endif %}
+{% endblock %}

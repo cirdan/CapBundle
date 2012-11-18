@@ -1,0 +1,25 @@
+{% extends 'SFCapBundle::cap.html.twig' %}
+{% block content %}
+<h1>Modification d'un objectif</h1>
+
+<form action="{{ path('goal_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+    {{ form_widget(edit_form) }}
+    <p>
+        <button type="submit" class="btn btn-primary btn-large">Modifier</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('goals') }}">
+            Retour à la liste des objectifs
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('goal_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit" class="btn">Effacer cet objectif</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}

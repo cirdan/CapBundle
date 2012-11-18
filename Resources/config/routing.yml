@@ -1,6 +1,9 @@
 SFCapBundle_sortie:
         resource: "@SFCapBundle/Resources/config/routing/sortie.yml"
         prefix:   /sortie
+SFCapBundle_goal:
+        resource: "@SFCapBundle/Resources/config/routing/goal.yml"
+        prefix:   /goal
 SFCapBundle_runner_weight:
         resource: "@SFCapBundle/Resources/config/routing/runnerweight.yml"
         prefix:   /weight
@@ -24,3 +27,6 @@ SFCapBundle_runner_bye:
 SFCap_js_main:
     pattern:   /js/SFCap.js
     defaults:  { _controller: SFCapBundle:Default:JSMain }
+goal_badges:
+    pattern:  /badges
+    defaults: { _controller: "SFCapBundle:CapGoal:badges" }

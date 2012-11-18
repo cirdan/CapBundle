@@ -1,0 +1,37 @@
+goals:
+    pattern:  /
+    defaults: { _controller: "SFCapBundle:CapGoal:index" }
+goal_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "SFCapBundle:CapGoal:show" }
+
+goal_new:
+    pattern:  /new
+    defaults: { _controller: "SFCapBundle:CapGoal:new" }
+
+goal_create:
+    pattern:  /create
+    defaults: { _controller: "SFCapBundle:CapGoal:create" }
+    requirements: { _method: post }
+
+goal_subscribe:
+    pattern:  /{id}/subscribe
+    defaults: { _controller: "SFCapBundle:CapGoal:subscribe" }
+
+goal_unsubscribe:
+    pattern:  /{id}/unsubscribe
+    defaults: { _controller: "SFCapBundle:CapGoal:unsubscribe" }
+
+goal_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "SFCapBundle:CapGoal:edit" }
+
+goal_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "SFCapBundle:CapGoal:update" }
+    requirements: { _method: post }
+
+goal_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "SFCapBundle:CapGoal:delete" }
+    requirements: { _method: post }

@@ -2,12 +2,12 @@
 
 namespace SF\CapBundle\Entity;
 
-use SF\CapUserBundle\Entity\CapUserRepository;
+#use SF\CapUserBundle\Entity\CapUserRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 
 /**
- * CapUserRepository
+ * CapRunnerRepository
  *
  */
 class CapRunnerRepository extends EntityRepository

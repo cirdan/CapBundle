@@ -1,9 +1,8 @@
 <?php
+
 namespace SF\CapBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-#use SF\CapUserBundle\Entity\CapUser;
-
 
 /**
  * SF\CapBundle\Entity\CapRunner
@@ -19,6 +18,16 @@ class CapRunner
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SF\CapBundle\Entity\CapGoalSubscription", mappedBy="runner")
+     */
+    protected $subscriptions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SF\CapBundle\Entity\CapGoal", mappedBy="owner")
+     */
+    protected $ownedGoals;
 
     /**
      * @var \hasData $hasData
@@ -53,26 +62,26 @@ class CapRunner
 
 
     /**
-     * Add sorties
+     * Add sortie
      *
-     * @param SF\CapBundle\Entity\Sortie $sorties
+     * @param SF\CapBundle\Entity\Sortie $sortie
      * @return Runner
      */
-    public function addSortie(\SF\CapBundle\Entity\Sortie $sorties)
+    public function addSortie(\SF\CapBundle\Entity\Sortie $sortie)
     {
-        $this->sorties[] = $sorties;
+        $this->sorties[] = $sortie;
     
         return $this;
     }
 
     /**
-     * Remove sorties
+     * Remove sortie
      *
-     * @param SF\CapBundle\Entity\Sortie $sorties
+     * @param SF\CapBundle\Entity\Sortie $sortie
      */
-    public function removeSortie(\SF\CapBundle\Entity\Sortie $sorties)
+    public function removeSortie(\SF\CapBundle\Entity\Sortie $sortie)
     {
-        $this->sorties->removeElement($sorties);
+        $this->sorties->removeElement($sortie);
     }
 
     /**
@@ -84,6 +93,16 @@ class CapRunner
     {
         return $this->sorties;
     }
+    /**
+     * Get subscriptions
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
+    }
+    
     /**
      * @ORM\OneToMany(targetEntity="SF\CapBundle\Entity\RunnerWeight", mappedBy="runner")
      */
@@ -165,6 +184,7 @@ class CapRunner
         return $this->hash;
     }
 
+
     /**
      * Constructor
      */
@@ -173,6 +193,11 @@ class CapRunner
         $this->sorties = new \Doctrine\Common\Collections\ArrayCollection();
         $this->runnerWeights = new \Doctrine\Common\Collections\ArrayCollection();
         $this->hash = md5(microtime());
+    }
+
+    public function __toString()
+    {
+        return $this->getHash();
     }
     
 }

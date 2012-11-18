@@ -4,6 +4,7 @@ namespace SF\CapBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\ResultSetMapping;
 use SF\CapBundle\Entity\DateTimeFrench;
 /**
  * SortieRepository
@@ -15,7 +16,7 @@ class SortieRepository extends EntityRepository
 {
     public function totalBetween($beginDate=null,$endDate=null,\SF\CapBundle\Entity\CapRunner $runner=null){
         if($endDate===null){
-        	$endDate=new \Datetime();
+            $endDate=new \Datetime();
         }
         if($beginDate===null){
             $beginDate=new \Datetime('0000-01-01');
@@ -29,12 +30,63 @@ class SortieRepository extends EntityRepository
             ->createQuery($query)
             ->getResult(Query::HYDRATE_SINGLE_SCALAR)/1000;
     }
+    public function minPerWeek($endDate=null,$nbWeeks=4,\SF\CapBundle\Entity\CapRunner $runner=null){
+        if($endDate===null){
+            $endDate=new \Datetime();
+        }
+        // We can consider only passed week : what is the last sunday ?
+        $lastSunday=strtotime ( "last sunday", $endDate->format("U") );
+        $firstDay=strtotime ( "last sunday -4 weeks + 1 days", $endDate->format("U") );
+        $endDate=new \Datetime(date("Y/m/d",$lastSunday));
+        $beginDate=new \Datetime(date("Y/m/d",$firstDay));
+        $em=$this->getEntityManager();
+        $sql = "SELECT MIN(d.dist) as distance
+                FROM 
+                    (
+                    SELECT
+                        SUM(s.distance) dist
+                    FROM
+                        Sortie s
+                    WHERE 
+                        runner_id = ".$runner->getId()." 
+                        AND date <= ".$endDate->format("Ymd")."
+                        AND date >= ".$beginDate->format("Ymd")."
+                    GROUP BY WEEK(date)
+                    ) d";
+        $rsm = new ResultSetMapping;
+        $rsm->addScalarResult("distance", "distance");
+        $query = $em->createNativeQuery($sql,$rsm);
+        return (int)$query->getResult(Query::HYDRATE_SINGLE_SCALAR);
+    }
+
+    public function totalDurationBetween($beginDate=null,$endDate=null,\SF\CapBundle\Entity\CapRunner $runner=null){
+        if($endDate===null){
+            $endDate=new \Datetime();
+        }
+        if($beginDate===null){
+            $beginDate=new \Datetime('0000-01-01');
+        }
+        $em=$this->getEntityManager();
+        $query="SELECT SUM(s.duration) FROM SFCapBundle:Sortie s WHERE s.date BETWEEN '".$beginDate->format( 'Y-m-d')."' AND '".$endDate->format( 'Y-m-d')."'";
+        if($runner){
+            $query.=" AND s.runner=".$runner->getId();
+        }
+        return $em
+            ->createQuery($query)
+            ->getResult(Query::HYDRATE_SINGLE_SCALAR);
+    }
 
     public function totalLastDays($nbDays=7,$runner=null){
         $today=new \Datetime("now");
         $startDate=new \Datetime("now");
         $startDate->sub(new \DateInterval('P'.$nbDays.'D'));
         return $this->totalBetween($startDate,$today,$runner);
+    }
+    public function totalDurationLastDays($nbDays=7,$runner=null){
+        $today=new \Datetime("now");
+        $startDate=new \Datetime("now");
+        $startDate->sub(new \DateInterval('P'.$nbDays.'D'));
+        return $this->totalDurationBetween($startDate,$today,$runner);
     }
     public function getDailyData(DateTimeFrench $beginDate=null,DatetimeFrench $endDate=null,\SF\CapBundle\Entity\CapRunner $runner=null){
         if($endDate===null){

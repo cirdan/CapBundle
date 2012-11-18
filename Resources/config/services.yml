@@ -7,19 +7,29 @@ services:
         factory_class:  %caprunner_factory.class%
         factory_method: get
         arguments: 
-            secucontext: "@security.context"
-            session: "@session"
-            em: "@doctrine.orm.entity_manager"
+            container: "@service_container"
             create: false
+    #CapGoalSubscritption:
+    #    class:          %capgoalsubscription.class%
+    #    factory_class:  %capgoalsubscription_factory.class%
+    #    factory_method: get
+    #    arguments: 
+    #        runner: "@security.context"
+    #        goal: "@session"
     NewCapRunner:
         class:          %caprunner.class%
         factory_class:  %caprunner_factory.class%
         factory_method: get
         arguments: 
-            secucontext: "@security.context"
-            session: "@session"
-            em: "@doctrine.orm.entity_manager"
+            container: "@service_container"
             create: true
+#    SubscritptionUpdater.listener:
+#        class: SF\CapBundle\Listener\SubscritptionUpdater
+#        tags:
+#            - { name: doctrine.event_listener, event: postPersist }
+#            - { name: doctrine.event_listener, event: postUpdate }
+#        arguments: 
+#            container: "@CapRunner"
     #twig.extension.myrunner:
     #    class: SF\CapBundle\Twig\SFCapTwigExtension
     #    tags:

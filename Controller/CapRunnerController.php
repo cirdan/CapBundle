@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller as Co;
 use SF\CapBundle\Entity\CapRunner;
 
 /**
- * Sortie controller.
+ * CapRunner controller.
  *
  */
 class CapRunnerController extends Co
@@ -17,7 +17,7 @@ class CapRunnerController extends Co
   public function recognizeAction(Request $request, $hash)
     {
       // On est identifié : redirection page d'accueil
-      if($this->get("security.context")->isGranted('IS_AUTHENTICATED_FULLY') && $this->getUser()->getRunner()==$runner ){
+      if($this->get("security.context")->isGranted('IS_AUTHENTICATED_FULLY') ){
         return $this->redirect($this->generateUrl('sf_cap_homepage'));
       }
       // Dans tous les cas on supprime le runner en session

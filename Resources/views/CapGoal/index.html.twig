@@ -1,0 +1,63 @@
+{% extends 'SFCapBundle::cap.html.twig' %}
+{% block content %}
+<h1>Objectifs</h1>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Mine ?</th>
+            <th>Achieved ?</th>
+            <th>Name</th>
+            <th>Duration</th>
+            <th>Distance</th>
+            <th>Delay</th>
+            <th>Sum</th>
+            <th>Public ?</th>
+            <th>Comment</th>
+            <th>Subscribed</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('goal_show', { 'id': entity.goal.id }) }}">{{ entity.goal.id }}</a></td>
+            <td>{{ entity.goal.isOwnedBy(runner) }}</td>
+            <td>{% if  entity.isAchieved %}Achieved on {{ entity.isAchieved|date }}{% endif %}</td>
+            <td>{{ entity.goal.name }}</td>
+            <td>{{ entity.goal.duration }}</td>
+            <td>{{ entity.goal.distance }}</td>
+            <td>{{ entity.goal.delay }}</td>
+            <td>{{ entity.goal.sum }}</td>
+            <td>{{ entity.goal.isPublic }}</td>
+            <td>{{ entity.goal.comment }}</td>
+            <td>
+                {% if  entity.isSubscribed %}
+                    <a href="{{ path('goal_unsubscribe', { 'id': entity.goal.id }) }}">unsubscribe</a>
+                {% else %}
+                    <a href="{{ path('goal_subscribe', { 'id': entity.goal.id }) }}">subscribe</a>
+                {% endif %}
+            </td>
+            <td>
+                <ul>
+                    {% if  entity.goal.isOwnedBy(runner) %}
+                    <li>
+                        <a href="{{ path('goal_edit', { 'id': entity.goal.id }) }}">edit</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('goal_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
+{% endblock %}
