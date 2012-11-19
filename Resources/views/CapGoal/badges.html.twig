@@ -1,7 +1,7 @@
 {% extends 'SFCapBundle::cap.html.twig' %}
 {% block content %}
 <h1>Badges</h1>
-<p>Les badges sont gagnés automatiquement au fur et à mesure de la saisie des sorties.</p>
+{% if runner %}
 <p>Voici la liste des badges que vous avez obtenus :</p>
     {% set entNum = 0 %}
     {% set nbBadgesPerLine = 12 %}{# must be 1 or 2 or 3 or 4 or 6 or 12 #}
@@ -81,4 +81,17 @@
     </div>
     </div>
     {% endif %}
+{% else %}
+<div class="row-fluid">
+<div class="span12">
+<div class="span3 well">
+  <h2>Obtenez votre premier badge !</h2>
+  <p>Notez votre pemière sortie :</p>
+  <p><a class="btn btn-primary btn-large" href="{{ path('sortie_new') }}"><i class="icon-plus icon-white"></i> {{'runs.create.new'|trans}}</a></p>
+</div>
+<div class="span6">
+<p>Les badges sont gagnés automatiquement au fur et à mesure de la saisie des sorties.</p>
+</div>
+</div>
+{% endif %}
 {% endblock %}

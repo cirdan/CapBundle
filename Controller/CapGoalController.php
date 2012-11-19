@@ -28,10 +28,11 @@ class CapGoalController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('SFCapBundle:CapGoal')->findPotentialForRunner($this->get("NewCapRunner"));
-        //$entities = $em->getRepository('SFCapBundle:CapGoal')->findSubscribedByRunner($this->get("CapRunner"));
-        //$entities = $em->getRepository('SFCapBundle:CapGoal')->findPendingByRunner($this->get("CapRunner"));
-
+        if($this->get("CapRunner")){
+            $entities = $em->getRepository('SFCapBundle:CapGoal')->findPotentialForRunner($this->get("NewCapRunner"));
+        }else{
+            $entities=array();
+        } 
         return array(
             'entities' => $entities,
             'runner' => $this->get("CapRunner")
@@ -46,10 +47,11 @@ class CapGoalController extends Controller
     public function badgesAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('SFCapBundle:CapGoal')->findAchievedBadgesByRunner($this->get("CapRunner"));
-        //$entities = $em->getRepository('SFCapBundle:CapGoal')->findPendingByRunner($this->get("CapRunner"));
-
+        if($this->get("CapRunner")){
+            $entities = $em->getRepository('SFCapBundle:CapGoal')->findAchievedBadgesByRunner($this->get("CapRunner"));
+        }else{
+            $entities=array();
+        } 
         return array(
             'entities' => $entities,
             'runner' => $this->get("CapRunner")

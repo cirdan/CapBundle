@@ -24,7 +24,7 @@
         <tr>
             <td><a href="{{ path('goal_show', { 'id': entity.goal.id }) }}">{{ entity.goal.id }}</a></td>
             <td>{{ entity.goal.isOwnedBy(runner) }}</td>
-            <td>{% if  entity.isAchieved %}Achieved on {{ entity.isAchieved|date }}{% endif %}</td>
+            <td>{% if  entity.isAchieved %}Achieved on {{ entity.isAchieved|localeDate }}{% endif %}</td>
             <td>{{ entity.goal.name }}</td>
             <td>{{ entity.goal.duration }}</td>
             <td>{{ entity.goal.distance }}</td>

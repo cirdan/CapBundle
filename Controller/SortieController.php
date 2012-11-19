@@ -256,7 +256,7 @@ class SortieController extends Controller
             $beginDate->sub(new \DateInterval('P'.$nbDays.'D'));
         }
         $return=json_encode(
-           $em->getRepository('SFCapBundle:Sortie')->getDailyData($beginDate,$endDate,$runner)
+           $em->getRepository('SFCapBundle:Sortie')->getDailyData($beginDate,$endDate,$runner,$this->getRequest()->getLocale())
         );//jscon encode the array
        return new Response($return,200,array('Content-Type'=>'application/json'));//make sure it has the correct content type
     }

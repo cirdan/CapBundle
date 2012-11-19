@@ -88,7 +88,7 @@ class SortieRepository extends EntityRepository
         $startDate->sub(new \DateInterval('P'.$nbDays.'D'));
         return $this->totalDurationBetween($startDate,$today,$runner);
     }
-    public function getDailyData(DateTimeFrench $beginDate=null,DatetimeFrench $endDate=null,\SF\CapBundle\Entity\CapRunner $runner=null){
+    public function getDailyData(DateTimeFrench $beginDate=null,DatetimeFrench $endDate=null,\SF\CapBundle\Entity\CapRunner $runner=null, $locale="fr_FR"){
         if($endDate===null){
             $endDate=new \DateTimeFrench();
         }
@@ -130,8 +130,8 @@ class SortieRepository extends EntityRepository
             }else{
                 $hrefs[]="";
             }
-
-            $labels[]=$beginDate->format("D j M");
+            setlocale(LC_TIME, $locale);
+            $labels[]=strftime("%a %e %b",$beginDate->format("U"));
             $beginDate->add(new \DateInterval("P1D"));
         }
         if(true || $runner->getOption("displayLogic")=="forward"){

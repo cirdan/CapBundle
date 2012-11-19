@@ -14,7 +14,7 @@
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td>{% if entity.date %}{{ entity.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>{% if entity.date %}{{ entity.date|localeDate }}{% endif %}</td>
             <td>{{ entity.duration }} min</td>
             <td>{{ entity.distance }} m</td>
             <td>

@@ -11,7 +11,7 @@ use Doctrine\ORM\Query;
  */
 class CapGoalRepository extends EntityRepository
 {
-    private function baseGoalsQuery($runner){
+    private function baseGoalsQuery(\SF\CapBundle\Entity\CapRunner $runner){
         $em=$this->getEntityManager();
     	$qb = $em->createQueryBuilder();
     	$qb ->select('g goal,s.achievementDate isAchieved,s.id isSubscribed')
