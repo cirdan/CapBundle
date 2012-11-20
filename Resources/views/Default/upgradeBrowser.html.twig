@@ -1,0 +1,14 @@
+{% extends 'SFCapBundle::cap.html.twig' %}
+{% block content %}
+    <div class="row-fluid">
+      <div class="span12">
+        <h1>{{'upgrade.ouch'|trans}}</h1>
+        <p>{{'upgrade.usingOldBrowser'|trans}}</p>
+        <p>{{'upgrade.pleaseUpgrade'|trans}}</p>
+        <ul>
+          <li><a href="http://www.mozilla.com/firefox/">Firefox ({{'upgrade.recommended'|trans}})</a></li>
+          <li><a href="http://www.google.com/chrome">Google Chrome</a></li>
+        </ul>
+      </div>
+    </div>
+{% endblock %}

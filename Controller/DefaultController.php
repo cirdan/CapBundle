@@ -46,5 +46,13 @@ class DefaultController extends Controller
                 )
             );
     }
+    public function upgradeBrowserAction()
+    {
+        return $this->render(
+            'SFCapBundle:Default:upgradeBrowser.html.twig',
+            array(
+                )
+            );
+    }
 
 }

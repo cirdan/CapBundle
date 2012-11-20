@@ -30,3 +30,6 @@ SFCap_js_main:
 goal_badges:
     pattern:  /badges
     defaults: { _controller: "SFCapBundle:CapGoal:badges" }
+upgrade_browser:
+    pattern:  /upgradeBrowser
+    defaults: { _controller: "SFCapBundle:Default:upgradeBrowser" }
